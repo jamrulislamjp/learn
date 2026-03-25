@@ -6,40 +6,82 @@ on:
   pull_request:
     branches: ["main"]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   laravel-tests:
     runs-on: ubuntu-latest
 
     env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
       DB_CONNECTION: sqlite
       DB_DATABASE: database/database.sqlite
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # ২রা জুনের সেই ওয়ার্নিং বন্ধ করার জন্য
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      # === PHP Setup ===
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.3"
-          extensions: mbstring, dom, curl, libxml, mysql, sqlite, bcmath, gd
+          extensions: mbstring, dom, curl, libxml, mysql, sqlite3, pdo_sqlite, bcmath, gd, zip, pcntl
           coverage: none
+          tools: composer:v2
 
-      - name: Install Composer Dependencies
-        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      # === Composer Caching + Install ===
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            vendor
+            ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
 
-      - name: Install NPM Dependencies & Build
+      - name: Install Composer dependencies
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --optimize-autoloader
+
+      # === Node.js Setup + NPM Caching + Build ===
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install NPM dependencies & Build
         run: |
-          npm install
+          npm ci
           npm run build
 
-      - name: Set Environment & Database
+      # === Environment & Database Setup ===
+      - name: Copy .env & Generate key
         run: |
           cp .env.example .env
-          php artisan key:generate
+          php artisan key:generate --ansi
+
+      - name: Set storage & bootstrap permissions
+        run: |
+          mkdir -p storage/framework/{sessions,views,cache}
+          chmod -R 775 storage bootstrap/cache
+
+      - name: Create SQLite database
+        run: |
           mkdir -p database
           touch database/database.sqlite
-          php artisan migrate --force
 
+      - name: Run migrations
+        run: php artisan migrate --force --seed
+
+      # === Quality Checks ===
+      - name: Run Pint (code style)
+        run: ./vendor/bin/pint --test
+
+      # === Tests ===
       - name: Execute tests
-        run: php artisan test --parallel
+        # যদি paratest প্যাকেজ না থাকে, তবে শুধু php artisan test দিন
+        run: php artisan test

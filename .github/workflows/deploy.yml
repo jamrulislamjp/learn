@@ -1,0 +1,39 @@
+name: Deploy to cPanel
+
+on:
+  push:
+    branches: ["main"] # যখন মেইন ব্রাঞ্চে পুশ করবেন তখনই আপলোড হবে
+
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+
+      - name: 📥 Install Dependencies
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: 🏗️ Build Assets (Vite)
+        run: |
+          npm install
+          npm run build
+
+      - name: 📂 Sync Files to Server
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /public_html/ # আপনার cPanel-এর মেইন ফোল্ডার পাথ
+          exclude: |
+            **/.git*
+            **/node_modules/**
+            **/tests/**
+            .env
