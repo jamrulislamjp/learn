@@ -54,7 +54,7 @@
                         Explore Documentation
                     </a>
                     <a href="#" class="w-full sm:w-auto px-8 py-4 border border-[#e3e3e0] dark:border-[#3E3E3A] rounded-xl font-bold text-lg hover:bg-gray-50 dark:hover:bg-[#161615] transition-all">
-                        Watch Tutorials
+                        Watch Tutorials 22
                     </a>
                 </div>
 
