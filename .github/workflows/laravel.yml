@@ -10,9 +10,10 @@ jobs:
   laravel-tests:
     runs-on: ubuntu-latest
 
-    # Node.js 24 এর জন্য এনভায়রনমেন্ট
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      DB_CONNECTION: sqlite
+      DB_DATABASE: database/database.sqlite
 
     steps:
       - uses: actions/checkout@v4
@@ -21,25 +22,24 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.3"
-          extensions: mbstring, dom, curl, libxml, mysql, sqlite, zip
+          extensions: mbstring, dom, curl, libxml, mysql, sqlite, bcmath, gd
           coverage: none
 
       - name: Install Composer Dependencies
         run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      - name: Copy .env
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-
-      - name: Generate key
-        run: php artisan key:generate
-
-      - name: Create Database
+      - name: Install NPM Dependencies & Build
         run: |
+          npm install
+          npm run build
+
+      - name: Set Environment & Database
+        run: |
+          cp .env.example .env
+          php artisan key:generate
           mkdir -p database
           touch database/database.sqlite
+          php artisan migrate --force
 
       - name: Execute tests
-        env:
-          DB_CONNECTION: sqlite
-          DB_DATABASE: database/database.sqlite
         run: php artisan test --parallel
