@@ -1,0 +1,18 @@
+includes:
+    - ./vendor/phpstan/phpstan/conf/bleedingEdge.neon
+
+parameters:
+    paths:
+        - app
+        - config
+        - database
+        - routes
+
+    # Level 5 থেকে শুরু করা ভালো, পরে আস্তে আস্তে ৯ পর্যন্ত নেওয়া যায়
+    level: 5
+
+    ignoreErrors:
+        - '#Undefined variable: \$this#'
+
+    excludePaths:
+        - ./routes/console.php

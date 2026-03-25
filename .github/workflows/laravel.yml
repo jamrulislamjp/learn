@@ -81,6 +81,13 @@ jobs:
       - name: Run Pint (code style)
         run: ./vendor/bin/pint --test
 
+        # === Quality Checks ===
+      - name: Run Pint (code style)
+        run: ./vendor/bin/pint --test
+
+      - name: Run PHPStan (Static Analysis)
+        run: ./vendor/bin/phpstan analyse --memory-limit=2G
+
       # === Tests ===
       - name: Execute tests
         # যদি paratest প্যাকেজ না থাকে, তবে শুধু php artisan test দিন
