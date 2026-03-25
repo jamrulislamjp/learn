@@ -8,11 +8,14 @@ parameters:
         - database
         - routes
 
-    # Level 5 থেকে শুরু করা ভালো, পরে আস্তে আস্তে ৯ পর্যন্ত নেওয়া যায়
     level: 5
+
+    # অপ্রয়োজনীয় ইগনোর এরর ওয়ার্নিং বন্ধ করতে এটি যোগ করুন
+    reportUnmatchedIgnoredErrors: false
 
     ignoreErrors:
         - '#Undefined variable: \$this#'
+        - '#Access to constant ATTR_SSL_CA on an unknown class Pdo\\Mysql#'
 
     excludePaths:
         - ./routes/console.php
