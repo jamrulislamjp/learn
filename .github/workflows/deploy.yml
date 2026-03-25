@@ -35,7 +35,9 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ./learn.queryfetch.com/
+          # নিচের এই অংশটি খুবই গুরুত্বপূর্ণ:
+          local-dir: ./ # আপনার পিসির কারেন্ট ডিরেক্টরি
+          server-dir: ./ # আপনার FTP ইউজারের কারেন্ট ডিরেক্টরি
           exclude: |
             **/.git*
             **/node_modules/**
