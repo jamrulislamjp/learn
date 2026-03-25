@@ -17,4 +17,9 @@ configer larastan -> phpstan.neon
 run larastan -> vendor\bin\phpstan analyse --memory-limit=2G
 
 
-cpanel doc -> queryfet_learn k!skGa&!euc1*wHj
+cpanel doc ->
+
+
+<!-- Breeze install  +   livewire  -->
+composer require laravel/breeze --dev
+php artisan breeze:install
