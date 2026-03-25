@@ -10,7 +10,7 @@ jobs:
   laravel-tests:
     runs-on: ubuntu-latest
 
-    # Node.js 24 এর জন্য এনভায়রনমেন্ট সেটআপ
+    # Node.js 24 এর জন্য এনভায়রনমেন্ট
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -20,12 +20,12 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.3" # Laravel 13/14 এর জন্য লেটেস্ট পিএইচপি
-          extensions: mbstring, dom, curl, libxml, mysql, sqlite
+          php-version: "8.3"
+          extensions: mbstring, dom, curl, libxml, mysql, sqlite, zip
           coverage: none
 
       - name: Install Composer Dependencies
-        run: composer install --prefer-dist --no-progress
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
@@ -33,10 +33,7 @@ jobs:
       - name: Generate key
         run: php artisan key:generate
 
-      - name: Directory Permissions
-        run: chmod -R 777 storage bootstrap/cache
-
-      - name: Create SQLite Database
+      - name: Create Database
         run: |
           mkdir -p database
           touch database/database.sqlite
@@ -45,4 +42,4 @@ jobs:
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
-        run: php artisan test
+        run: php artisan test --parallel
