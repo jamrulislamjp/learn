@@ -4,6 +4,9 @@ on:
   push:
     branches: ["main"]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # ২রা জুনের ওয়ার্নিং বন্ধ হবে
+
 jobs:
   deploy:
     name: 🚀 Deploy Project
@@ -15,7 +18,7 @@ jobs:
       - name: 🛠️ Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2" # আপনার সার্ভারের ভার্সনের সাথে মিল রেখে
+          php-version: "8.2"
           tools: composer:v2
 
       - name: 📥 Install Dependencies
