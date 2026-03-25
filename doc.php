@@ -14,3 +14,7 @@ phpstan/phpstan -> code run previous check where is worng code -> vendor\bin\php
 
 install larastan -> composer require --dev nunomaduro/larastan
 configer larastan -> phpstan.neon
+run larastan -> vendor\bin\phpstan analyse --memory-limit=2G
+
+
+cpanel doc -> queryfet_learn k!skGa&!euc1*wHj
