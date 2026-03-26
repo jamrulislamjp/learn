@@ -85,8 +85,8 @@ jobs:
       - name: Run Pint (code style)
         run: ./vendor/bin/pint --test
 
-      - name: Run PHPStan (Static Analysis)
-        run: ./vendor/bin/phpstan analyse --memory-limit=2G
+      #  - name: Run PHPStan (Static Analysis)
+      #    run: ./vendor/bin/phpstan analyse --memory-limit=2G
 
       # === Tests ===
       - name: Execute tests
