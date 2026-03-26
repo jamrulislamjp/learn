@@ -19,4 +19,4 @@ Route::get('/products', ProductIndex::class)->name('product.index');
 Route::get('/products/create', ProductCreate::class)->name('product.create');
 Route::get('/products/edit/{id}', ProductEdit::class)->name('product.edit');
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

@@ -11,6 +11,7 @@ class ProductIndex extends Component
     use WithPagination;
 
     public $sortColumn = 'name';
+
     public $sortDirection = 'asc';
 
     public $search = '';
@@ -42,8 +43,8 @@ class ProductIndex extends Component
     public function render()
     {
         // ১. ডাটা কুয়েরি করা
-        $products = Product::where('name', 'like', '%' . $this->search . '%')
-            ->orWhere('description', 'like', '%' . $this->search . '%')
+        $products = Product::where('name', 'like', '%'.$this->search.'%')
+            ->orWhere('description', 'like', '%'.$this->search.'%')
             ->orderBy($this->sortColumn, $this->sortDirection)
             ->paginate(10);
 
@@ -52,7 +53,7 @@ class ProductIndex extends Component
 
         return view('livewire.product.product-index', [
             'products' => $products,
-            'loadTime' => $loadTime // ৩. ভিউতে পাঠিয়ে দেওয়া
+            'loadTime' => $loadTime, // ৩. ভিউতে পাঠিয়ে দেওয়া
         ]);
     }
 }

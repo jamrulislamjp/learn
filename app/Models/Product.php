@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name',
         'description',
@@ -17,7 +18,7 @@ class Product extends Model
 
     // You can also add relationships, accessors, mutators, etc. here
     protected $casts = [
-        'price' => "decimal:2",
-        'stock' => "integer",
+        'price' => 'decimal:2',
+        'stock' => 'integer',
     ];
 }

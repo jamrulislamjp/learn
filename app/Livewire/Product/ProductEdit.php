@@ -2,13 +2,20 @@
 
 namespace App\Livewire\Product;
 
-use Livewire\Component;
 use App\Models\Product;
+use Livewire\Component;
 
 class ProductEdit extends Component
 {
     public $productId; // এডিট করার জন্য আইডি
-    public $name, $description, $price, $stock;
+
+    public $name;
+
+    public $description;
+
+    public $price;
+
+    public $stock;
 
     public function mount($id)
     {
@@ -33,13 +40,14 @@ class ProductEdit extends Component
         $product->update($validatedData);
 
         session()->flash('message', 'Product updated successfully!');
+
         return $this->redirect('/products', navigate: true);
     }
 
     public function render()
     {
         return view('livewire.product.product-edit', [
-            'product' => Product::find($this->productId)
+            'product' => Product::find($this->productId),
         ]);
     }
 }

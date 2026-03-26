@@ -7,12 +7,13 @@ use Livewire\Component;
 
 class ProductCreate extends Component
 {
-
     public $name;
-    public $description;
-    public $price;
-    public $stock;
 
+    public $description;
+
+    public $price;
+
+    public $stock;
 
     public function render()
     {
@@ -34,6 +35,7 @@ class ProductCreate extends Component
         // Optionally, you can reset the form fields or redirect to another page
         $this->reset(); // Reset form fields
         session()->flash('message', 'Product created successfully!'); // Flash message
+
         return $this->redirect('/products', navigate: true);
     }
 }
