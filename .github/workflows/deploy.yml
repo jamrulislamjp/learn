@@ -26,6 +26,7 @@ jobs:
 
       - name: 🏗️ Build Assets (Vite)
         run: |
+          npm install --include=optional @rollup/rollup-linux-x64-gnu
           npm install
           npm run build
 
